@@ -323,23 +323,30 @@ $(".data_search").on('click',function(){
 function downloadchk(type_seq,file_name){
 	
 	swal({
-  title: "Excel 다운로드",
-  text: "",
+  title: file_name,
+  text: "파일을 다운로드 받으시겠습니까?",
   icon: "warning",
   buttons: true,
   dangerMode: true,
 })
 .then((willDelete) => {
   if (willDelete) {
-    swal("성공", {
+    swal("다운로드를 시작합니다.", {
       icon: "success",
       //사용자가 다운로드를 받고 싶다고 버튼 클릭시 다운로드 시작
 
     });
 	location.href="/org/downloadSampleData?type_seq="+type_seq+"&filename="+file_name;
+	//다운로드 확인 버튼 클릭시 2초뒤에 페이지 새로 고침  에러나서 skip
+	/*setTimeout(function(){
+	location.reload();
+	},2000);*/
+	
   } else {
-    swal("취소");
+    swal("다운로드를 취소합니다.");
   }
 });
+
+
 }
 

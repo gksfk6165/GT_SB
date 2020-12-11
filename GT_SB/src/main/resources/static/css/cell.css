@@ -55,7 +55,7 @@
 }
 
 .sample_data_table{
-	font-size: 0.9vw;
+	font-size: 0.7vw;
 	text-align:center;
 }
 .sample_file_name{
@@ -74,4 +74,11 @@
 
 .download_image:hover{
 	cursor: pointer;
+}
+
+.code{
+	font-size:0.7vw !important;
+}
+.excelDownload:hover{
+	cursor:pointer;
 }

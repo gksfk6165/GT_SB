@@ -12,7 +12,6 @@ import com.org.sb.vo.CellDataVo;
 public class DataSpecs {
 
 	public static Specification<CellDataVo> bytypeseq(final int keyword){
-		System.out.println("확인 :  " + keyword);
 		return new Specification<CellDataVo>(){
 			
 			@Override

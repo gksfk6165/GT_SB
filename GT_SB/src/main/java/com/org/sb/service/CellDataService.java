@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -43,11 +46,17 @@ public class CellDataService {
         
         // 헤더 행 생
         Row headerRow = sheet.createRow(0);
+        headerRow.setHeight((short)450);
         // 해당 행의 첫번째 열 셀 생성
         Cell headerCell;
+        
+        CellStyle cellstyle= workbook.createCellStyle();
+        cellstyle.setFillForegroundColor(IndexedColors.LIGHT_YELLOW.getIndex());
+        cellstyle.setFillPattern(FillPatternType.BRICKS);
         for(int i=0;i<19;i++) {
         	 headerCell = headerRow.createCell(i);
         	 headerCell.setCellValue(rowname[i]);
+        	 headerCell.setCellStyle(cellstyle);
         }
         
         // 과일표 내용 행 및 셀 생성
@@ -136,9 +145,8 @@ public class CellDataService {
 	
 	//시트 열 너비 설정
 	public void sheetwidth(SXSSFSheet sheet) {
-        sheet.setColumnWidth(0, 1500);
-        sheet.setColumnWidth(0, 3000);
-        sheet.setColumnWidth(0, 3000);
-        sheet.setColumnWidth(0, 1500);
+		for(int i=0;i<19;i++) {
+			sheet.setColumnWidth(i, 3500);
+		}
 	}
 }
