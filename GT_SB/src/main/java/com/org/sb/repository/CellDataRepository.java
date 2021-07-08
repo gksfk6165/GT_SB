@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.org.sb.vo.CellDataVo;
+import com.org.sb.vo.EvalDataVo;
 
 @Repository
 public interface CellDataRepository extends JpaRepository<CellDataVo, Long> {

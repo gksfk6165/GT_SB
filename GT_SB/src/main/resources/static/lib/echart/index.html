@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<script src="jquery-3.3.1.min.js"></script>
+	<script src="testData.js"></script>
+	<script src="echart/echarts.common.min.js"></script>
+	<script src="echart/echarts-en.common.min.js"></script>
+	<script src="echart/echarts.simple.min.js"></script>
+	<script src="echart/echarts-en.simple.min.js"></script>
+	<script src="echart/echarts.js"></script>
+
+	<script src="org/org_prototype.js"></script>
+	<script src="org/org_common.js"></script>
+	<script src="org/org_module.js"></script>
+	<script src="org/org_chart.js"></script>
+	<script src="org/org.js"></script>
+	<script>
+
+		// 라인차트
+		const line = {
+		    option : {
+                // ##차트를 그릴 element id
+				// @target : (String) #을 제외한 id값
+                target : "test",
+
+                // ##테스트 모드 설정
+				// @bool : (Boolean) 개발 - true, 배포 - false
+				// @data : (Array) bool true 일시 데이터 삽입 요망
+                test : {
+                    bool : true,
+                    data : sampleData.dataStatistics
+                },
+
+				// ##차트를 생성하기위한 데이터
+				// @data : (Array) 데이터 배열
+				data : null,
+
+				// ##타이틀 설정
+				// @title : (String) 빈값("")을 넘기면 title 이 hide 처리됨
+                title : "",
+
+                // ##차트 종류
+				// @type : (String) line , bar , pie , treemap
+                type : "line",
+
+				// ##legend 설정
+				// @bool : (Boolean) Data에서 추출 하여 자동으로 설정 : true , 수동 입력 : false
+                // @type : (String) 레전드 타입 설정 plain(default), scroll
+				// @data - bool이 false 일 경우, 기본값 : []
+                legend : {
+					data : ["HNT", "PNE", "TOYO"]
+                },
+				// ##Tooltip 설정
+                tooltip: {},
+				grid : {
+                    left : 50,
+					top:20,
+					right : 100,
+					bottom: 70
+				},
+				// ##xAxis 설정
+				// @xAxis : (String)
+                xAxis: "category",
+                yAxis: "value",
+                dataZoom : {
+                    x : true,
+					y : false
+				}
+            },
+			viewer : {},
+            init : function(){
+		        let option = this.option;
+		        this.viewer = org.m.chart(option)
+			}
+		};
+
+		const pie = {
+            option : {
+                // ##차트를 그릴 element id
+                // @target : (String) #을 제외한 id값
+                target : "test2",
+
+                // ##테스트 모드 설정
+                // @bool : (Boolean) 개발 - true, 배포 - false
+                // @data : (Array) bool true 일시 데이터 삽입 요망
+                test : {
+                    bool : true,
+                    data : pieCreateData()
+                },
+
+                // ##차트를 생성하기위한 데이터
+                // @data : (Array) 데이터 배열
+                data : null,
+
+                // ##타이틀 설정
+                // @title : (String) 빈값("")을 넘기면 title 이 hide 처리됨
+                title : "echart 모듈 제작 - 파이차트",
+
+                // ##차트 종류
+                // @type : (String) line , bar , pie , treemap
+                type : "pie",
+
+                // ##legend 설정
+                // @bool : (Boolean) Data에서 추출 하여 자동으로 설정 : true , 수동 입력 : false
+                // @type : (String) 레전드 타입 설정 plain(default), scroll
+                // @data - bool이 false 일 경우, 기본값 : []
+                legend : {},
+                // ##Tooltip 설정
+                tooltip: {},
+                // ##xAxis 설정
+                // @xAxis : (String)
+                xAxis: "",
+                yAxis: "",
+                dataZoom : {
+                    x : false,
+                    y : false
+                }
+            },
+            viewer : {},
+            init : function(){
+                let option = this.option;
+                this.viewer = org.m.chart(option)
+            }
+		};
+
+        const tree = {
+            option : {
+                // ##차트를 그릴 element id
+                // @target : (String) #을 제외한 id값
+                target : "test3",
+
+                // ##테스트 모드 설정
+                // @bool : (Boolean) 개발 - true, 배포 - false
+                // @data : (Array) bool true 일시 데이터 삽입 요망
+                test : {
+                    bool : true,
+                    data : treeCreateData()
+                },
+
+                // ##차트를 생성하기위한 데이터
+                // @data : (Array) 데이터 배열
+                data : null,
+
+                // ##타이틀 설정
+                // @title : (String) 빈값("")을 넘기면 title 이 hide 처리됨
+                title : "echart 모듈 제작 - 트리맵차트",
+
+                // ##차트 종류
+                // @type : (String) line , bar , pie , treemap
+                type : "treemap",
+
+                // ##legend 설정
+                // @bool : (Boolean) Data에서 추출 하여 자동으로 설정 : true , 수동 입력 : false
+                // @type : (String) 레전드 타입 설정 plain(default), scroll
+                // @data - bool이 false 일 경우, 기본값 : []
+                legend : {
+                    formatter: function (info) {
+                        let value = info.value;
+                        let treePathInfo = info.treePathInfo;
+                        let treePath = [];
+
+                        for (let i = 1; i < treePathInfo.length; i++) {
+                            treePath.push(treePathInfo[i].name);
+                        }
+
+                        return [
+                            '<div class="tooltip-title">' + formatUtil.encodeHTML(treePath.join('/')) + '</div>',
+                            'Disk Usage: ' + formatUtil.addCommas(value) + ' KB',
+                        ].join('');
+                    }
+				},
+                // ##Tooltip 설정
+                tooltip: {},
+                // ##xAxis 설정
+                // @xAxis : (String)
+                xAxis: "",
+                yAxis: "",
+                dataZoom : {
+                    x : false,
+                    y : false
+                }
+            },
+            viewer : {},
+            init : function(){
+                let option = this.option;
+                this.viewer = org.m.chart(option)
+            }
+        };
+
+        function treeCreateData(){
+            let data = treemapData
+            // 필요 데이터 추출 - agent name / instrument name / value
+			/*let newData = [];
+			for(let i=0; i<data.length; i++){
+			    let o = {};
+			    o["agent_name"] = data[i].agent_name;
+                o["instrument_name"] = data[i].instrument_name;
+                o["value"] = data[i].value;
+
+                newData.push(o)
+			}*/
+
+			// agent 중복제거
+			let agentArr = [];
+            for(let i=0; i<data.length; i++){
+                agentArr.push(data[i].agent_name);
+            }
+            let _agent = agentArr.filter(function(a,b,c){
+                return c.indexOf(a) === b;
+			});
+
+			// 중복 제거한 agent 로 구조체 생성
+            let newDataArr = _agent.map(function(a){
+			    let o = {};
+			    o["name"] = a;
+			    o["path"] = a;
+			    o["value"] = 0;
+			    o["children"] = [];
+
+			    for(let k=0; k<data.length; k++){
+			        if( data[k].agent_name === a ){
+			            o.value += data[k].value;
+			            let d = {}
+			            d["value"] = data[k].value;
+			            d["name"] = data[k].instrument_name;
+			            d["path"] = o.path +"/"+data[k].instrument_name;
+			            o.children.push(d)
+					}
+				}
+				return o;
+			});
+
+
+            return newDataArr;
+        }
+
+        function pieCreateData(){
+            let data = sampleData.agentStatistics;
+            let dataObj = {};
+            let dataArr = [];
+             for(let k=0; k<data.length; k++){
+				 let nm = data[k].agent_name;
+				 if(dataObj.hasOwnProperty(nm)){
+					 dataObj[nm] += data[k].value;
+				 } else {
+					 dataObj[nm] = 0;
+				 }
+			 }
+
+			 for(let t in dataObj){
+				 let o = {};
+				 o[t] = dataObj[t];
+				 dataArr.push(o)
+			 }
+
+			 let arr = [dataArr[0],dataArr[2],dataArr[3]];
+			 return arr;
+
+		}
+        window.addEventListener('DOMContentLoaded', function() {
+            line.init();
+
+			pie.init();
+
+			tree.init()
+        });
+	</script>
+</head>
+<body>
+
+	<div id="test" style="width:100%; height:500px"></div>
+	<div id="test2" style="width:100%; height:500px"></div>
+	<div id="test3" style="width:100%; height:500px"></div>
+
+</body>
+</html>

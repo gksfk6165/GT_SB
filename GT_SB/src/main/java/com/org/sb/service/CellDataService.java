@@ -1,6 +1,8 @@
 package com.org.sb.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -10,13 +12,18 @@ import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.h2.util.json.JSONArray;
+import org.h2.util.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.org.sb.repository.CellDataRepository;
 import com.org.sb.repository.DataSpecs;
+import com.org.sb.repository.EvalDataRepository;
+import com.org.sb.vo.CellChartDataVo;
 import com.org.sb.vo.CellDataVo;
+import com.org.sb.vo.EvalDataVo;
 
 @Service
 public class CellDataService {
@@ -26,6 +33,9 @@ public class CellDataService {
 			"dV/dt(V/s)","Internal_Resistance(Ohm)","Is_FC_Data","AC_Impedance(Ohm)","ACI_Phase_Angle(Deg)","Temperature_(C)_1","Temperature_(C)_2",};
 	@Autowired
 	CellDataRepository cellDataRepository;
+	
+	@Autowired
+	EvalDataRepository evalDataRepository;
 	
 	public List<CellDataVo> findAllData(int type_seq){
 		Specification<CellDataVo> spec = Specification.where(DataSpecs.bytypeseq(type_seq));
@@ -149,4 +159,40 @@ public class CellDataService {
 			sheet.setColumnWidth(i, 3500);
 		}
 	}
+	
+	//step data 가지고 오기
+	public List<EvalDataVo> stepData(int type_seq) {
+		
+		List<EvalDataVo> list= evalDataRepository.findByTypeSeq(type_seq);
+		
+		return list;
+	}
+	
+	//데이터 변화량 계산
+	
+	public List<EvalDataVo> amountOfChangeData(List<EvalDataVo> list){
+		List<EvalDataVo> changeList = new ArrayList<EvalDataVo>();
+		
+		
+		for(int i = 0 ; i < list.size(); i++) {
+			EvalDataVo vo = new EvalDataVo();
+			if(i==0) {
+				vo.setVoltage(0.0);
+				vo.setCurrent(0.0);
+				vo.setCharge_capacity(0.0);
+				vo.setTemperature_1(0.0);
+				vo.setDate_time(list.get(i).getDate_time());
+				
+			}else {
+				vo.setVoltage(list.get(i).getVoltage()-list.get(i-1).getVoltage());
+				vo.setCurrent(list.get(i).getCurrent() - list.get(i-1).getCurrent());
+				vo.setCharge_capacity(list.get(i).getCharge_capacity() - list.get(i-1).getCharge_capacity());
+				vo.setTemperature_1(list.get(i).getTemperature_1() - list.get(i-1).getTemperature_1());
+				vo.setDate_time(list.get(i).getDate_time());
+			}
+			changeList.add(vo);
+		}
+		return changeList;
+	}
+	
 }

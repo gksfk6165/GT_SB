@@ -5,93 +5,91 @@
 <meta charset="UTF-8">
 <th:block th:replace="common/commonHead"></th:block>
 <title>Calce Battery</title>
+<script src="/js/cell.js" defer></script>
 </head>
 <body>
-	<nav class="navbar navbar-white bg-white"
-		th:include="common/header :: header_nav"></nav>
-	<form id="form1" name="form1" action="/org/battery/search" method="GET">
-		<div class="container container_calce_battery col-12">
-			<div class="row">
-
-				<div class="col-xl-2 col-md-4">
-					<div class="input-group mb-3">
-						<div class="input-group-prepend">
-							<label class="input-group-text" for="group_code_select">group_code</label>
+	<div class="loading-bg">
+		<div class="loader"></div>
+		<div class="loadingPercentage">
+			<!-- <span id="lb_loading_percent">검색 중 00%</span> -->
+			<button class="btn btn-danger" onclick="fn_stopAjax();">검색
+				중단</button>
+		</div>
+	</div>
+	<nav class="navbar navbar-white bg-white" th:include="common/header :: header_nav"></nav>
+	<div class="search-form">
+		<form id="form1" name="form1" action="/org/battery/search" method="GET">
+			<div class="container container_calce_battery col-12">
+				<div class="row">
+						<div class="search-left">
+							<div class="search-compo">
+								<div class="input-group input-group-sm mb-3">
+									<div class="input-group-prepend">
+										<label class="input-group-text" for="group_code_select">group_code</label>
+									</div>
+									<select class="custom-select" id="group_code_select"
+										name="groupcode">
+										<option value="" selected disabled hidden>--선택하세요--</option>
+										<option value="01">Cyclindrical_Cells</option>
+										<option value="02">Prismatic_Cells</option>
+										<option value="03">Pouch_Cells</option>
+										<option value="04">Other_Cells</option>
+									</select>
+								</div>
+							</div>
+							<div class="search-compo">
+								<div class="input-group input-group-sm mb-3">
+									<div class="input-group-prepend">
+										<label class="input-group-text" for="sample_code_select">sample_code</label>
+									</div>
+									<select class="custom-select" id="sample_code_select"
+										disabled="disabled" name="samplecode">
+									</select>
+								</div>
+							</div>
+							<div class="search-compo">
+								<div class="input-group input-group-sm mb-3">
+									<div class="input-group-prepend">
+										<label class="input-group-text" for="depth1_select">depth1</label>
+									</div>
+									<select class="custom-select" id="depth1_select"
+										disabled="disabled" name="depth1">
+									</select>
+								</div>
+							</div>
+							<div class="search-compo">
+							<div class="input-group input-group-sm mb-3">
+								<div class="input-group-prepend">
+									<label class="input-group-text" for="depth2_select">depth2</label>
+								</div>
+								<select class="custom-select" id="depth2_select" disabled="disabled" name="depth2"></select>
+								</div>
+							</div>
+							<div class="search-compo">
+								<div class="input-group input-group-sm mb-3">
+									<div class="input-group-prepend">
+										<label class="input-group-text" for="depth3_select">depth3</label>
+									</div>
+									<select class="custom-select" id="depth3_select" disabled="disabled" name="depth3"></select>
+								</div>
+							</div>
 						</div>
-						<select class="custom-select" id="group_code_select"
-							name="groupcode">
-							<option value="" selected disabled hidden>--선택하세요--</option>
-							<option value="01">Cyclindrical_Cells</option>
-							<option value="02">Prismatic_Cells</option>
-							<option value="03">Pouch_Cells</option>
-							<option value="04">Other_Cells</option>
-						</select>
-					</div>
-				</div>
-				<div class="col-xl-2 col-md-4">
-					<div class="input-group mb-3">
-						<div class="input-group-prepend">
-							<label class="input-group-text" for="sample_code_select">sample_code</label>
+					<div class="search-right">
+						<div class="search-compo">
+							<button type="button" class="btn btn-outline-secondary  data_search">검색</button>
+							<input type="hidden" id="groupcode_value" th:value="${value_list.groupcode}"> 
+							<input type="hidden" id="samplevalue" th:value="${value_list.samplecode}"> 
+							<input type="hidden" id="depth1_value" th:value="${value_list.depth1}">
+							<input type="hidden" id="depth2_value" th:value="${value_list.depth2}"> 
+							<input type="hidden" id="depth3_value" th:value="${value_list.depth3}">
 						</div>
-						<select class="custom-select" id="sample_code_select"
-							disabled="disabled" name="samplecode">
-						</select>
 					</div>
-				</div>
-				<div class="col-xl-2 col-md-4">
-					<div class="input-group mb-3">
-						<div class="input-group-prepend">
-							<label class="input-group-text" for="depth1_select">depth1</label>
-						</div>
-						<select class="custom-select" id="depth1_select"
-							disabled="disabled" name="depth1">
-						</select>
-					</div>
-				</div>
-				<div class="col-xl-2 col-md-4">
-					<div class="input-group mb-3">
-						<div class="input-group-prepend">
-							<label class="input-group-text" for="depth2_select">depth2</label>
-						</div>
-						<select class="custom-select" id="depth2_select"
-							disabled="disabled" name="depth2">
-						</select>
-					</div>
-				</div>
-				<div class="col-xl-2 col-md-4">
-					<div class="input-group mb-3">
-						<div class="input-group-prepend">
-							<label class="input-group-text" for="depth3_select">depth3</label>
-						</div>
-						<select class="custom-select" id="depth3_select"
-							disabled="disabled" name="depth3">
-						</select>
-					</div>
-				</div>
-				<div class="col-xl-2 col-md-4">
-					<button type="button"
-						class="btn btn-outline-secondary  data_search">검색</button>
-
-					<input type="hidden" id="groupcode_value"
-						th:value="${value_list.groupcode}"> <input type="hidden"
-						id="samplevalue" th:value="${value_list.samplecode}"> <input
-						type="hidden" id="depth1_value" th:value="${value_list.depth1}">
-					<input type="hidden" id="depth2_value"
-						th:value="${value_list.depth2}"> <input type="hidden"
-						id="depth3_value" th:value="${value_list.depth3}">
 				</div>
 			</div>
-		</div>
-	</form>
-	<div class="row section_table">
-		<div class="col-12 select_row">
-			<select class="selectpicker" id="selectPageSize">
-				<option th:value="10" th:selected="${value_list.size == 10}">10</option>
-				<option th:value="25" th:selected="${value_list.size == 25}">25</option>
-				<option th:value="50" th:selected="${value_list.size == 50}">50</option>
-			</select>
-		</div>
-		<div class="col-10 sample_data_table">
+		</form>
+	</div>
+	<div class="row section_table m-4">
+		<div class="col-12 sample_data_table">
 			<table class="table">
 				<tr class="d-flex">
 					<th class="col-1" scope="col">번호</th>
@@ -99,42 +97,44 @@
 					<th class="col-1 " scope="col">sample_code</th>
 					<th class="col-2" scope="col">depth1</th>
 					<th class="col-2" scope="col">depth2</th>
-					<th class="col-2" scope="col">depth3</th>
-					<th class="col-2 " scope="col">sample_file_name</th>
+					<th class="col-1" scope="col">depth3</th>
+					<th class="col-2" scope="col">sample_file_name</th>
 					<th class="col-1" scope="col">download</th>
-
+					<th class="col-1" scope="col">chart</th>
 				</tr>
 				<!-- <tr th:each="excel : ${cell}"> -->
 				<tr th:each="excel,index : ${cell}" class="cellsampletype d-flex">
-					<td th:text="${(index.index+1)+(number)*(value_list.size)}"
-						class="col-1"></td>
+					<td th:text="${(index.index+1)+(number)*(value_list.size)}" class="col-1"></td>
 					<td th:text="${excel.cellGroupVo.name}" class="col-1"></td>
 					<td th:text="${excel.cellSampleVo.name}" class="col-1"></td>
 					<td th:text="${excel.depth1}" class="col-2"></td>
 					<td th:text="${excel.depth2}" class="col-2"></td>
-					<td th:text="${excel.depth3}" class="col-2"></td>
-					<td th:text="${excel.sample_file_name}"
-						class="col-2 sample_file_name"></td>
-					<td class="col-1"><input type="hidden" class="type_seq"
-						name="type_seq" th:value="${excel.sample_file_name}"> <input
-						type="hidden" class="file_name" name="file_name"
-						th:value="${excel.seq}"> <img
-						th:src="@{/img/download.png}" class="excelDownload"
-						th:onclick="downloadchk([[${excel.seq}]],[[${excel.sample_file_name}]])"
-						width="30px"></td>
+					<td th:text="${excel.depth3}" class="col-1"></td>
+					<td th:text="${excel.sample_file_name}" class="col-2 sample_file_name"></td>
+					<td class="col-1">
+						<input type="hidden" class="type_seq" name="type_seq" th:value="${excel.seq}"> 
+						<input type="hidden" class="file_name" name="file_name" th:value="${excel.sample_file_name}"> 
+						<img th:src="@{/img/download.png}" class="excelDownload" th:onclick="downloadchk([[${excel.seq}]],[[${excel.sample_file_name}]])" width="30px">
+					</td>
+					<td class="col-1">
+						<img th:src="@{/img/bar-chart.png}" class="evaluateChartData" th:onclick="evalData.chartView([[${excel.seq}]])"/>
+					</td>
+					
 				</tr>
 			</table>
 
 			<th:block th:if="${searchcheck == 0}">
-				<div aria-label="Page navigation example"
-					class="page-num page-button"
-					th:with="start=${(number/maxPage)*maxPage + 1},
+				<div aria-label="Page navigation example" class="page-num page-button page-wrapper" th:with="start=${(number/maxPage)*maxPage + 1},
                   end=(${(cell.totalPages == 0) ? 1 : (start + (maxPage - 1) < cell.totalPages ? start + (maxPage - 1) : cell.totalPages)})">
+					<select class="selectpicker" id="selectPageSize">
+						<option th:value="10" th:selected="${value_list.size == 10}">10</option>
+						<option th:value="25" th:selected="${value_list.size == 25}">25</option>
+						<option th:value="50" th:selected="${value_list.size == 50}">50</option>
+					</select>
 					<ul class="pagination">
 						<li th:if="${start > 1}" class="page-item"><a
 							class="page-link" th:href="@{battery(page=0,size=${cell.size})}"
 							th:text="'<<'"></a></li>
-						</li>
 
 						<li th:if="${start > 1}" class="page-item"><a
 							th:href="@{battery(page=${start - maxPage-1},size=${cell.size})}"
@@ -146,7 +146,6 @@
 							class="page-item"><a
 							th:href="@{battery(page=${page-1},size=${cell.size})}"
 							th:text="${page}" class="page-link"></a></li>
-						</li>
 
 						<li th:if="${end < cell.totalPages}" class="page-item"><a
 							th:href="@{battery(page=${start + maxPage-1},size=${cell.size})}"
@@ -155,21 +154,22 @@
 						<li th:if="${end < cell.totalPages}" class="page-item"><a
 							th:href="@{battery(page=${cell.totalPages-1},size=${cell.size})}"
 							th:text="'>>'" class="page-link"></a></li>
-						</li>
 					</ul>
 				</div>
 			</th:block>
 			<th:block th:if="${searchcheck==1}">
-				<div aria-label="Page navigation example"
-					class="page-num page-button"
-					th:with="start=${(number/maxPage)*maxPage + 1},
+				<div aria-label="Page navigation example" class="page-num page-button page-wrapper" th:with="start=${(number/maxPage)*maxPage + 1},
                   end=(${(cell.totalPages == 0) ? 1 : (start + (maxPage - 1) < cell.totalPages ? start + (maxPage - 1) : cell.totalPages)})">
+                  	<select class="selectpicker" id="selectPageSize">
+						<option th:value="10" th:selected="${value_list.size == 10}">10</option>
+						<option th:value="25" th:selected="${value_list.size == 25}">25</option>
+						<option th:value="50" th:selected="${value_list.size == 50}">50</option>
+					</select>
 					<ul class="pagination">
 						<li th:if="${start > 1}" class="page-item"><a
 							class="page-link"
 							th:href="@{search(page=0,size=${cell.size},groupcode=${value_list.groupcode},samplecode=${value_list.samplecode},depth1=${value_list.depth1},depth2=${value_list.depth2},depth3=${value_list.depth3})}"
 							th:text="'<<'"></a></li>
-						</li>
 
 						<li th:if="${start > 1}" class="page-item"><a
 							th:href="@{search(page=${start - maxPage-1},size=${cell.size},groupcode=${value_list.groupcode},samplecode=${value_list.samplecode},depth1=${value_list.depth1},depth2=${value_list.depth2},depth3=${value_list.depth3})}"
@@ -181,7 +181,6 @@
 							class="page-item"><a
 							th:href="@{search(page=${page-1},size=${cell.size},groupcode=${value_list.groupcode},samplecode=${value_list.samplecode},depth1=${value_list.depth1},depth2=${value_list.depth2},depth3=${value_list.depth3})}"
 							th:text="${page}" class="page-link"></a></li>
-						</li>
 
 						<li th:if="${end < cell.totalPages}" class="page-item"><a
 							th:href="@{search(page=${start + maxPage-1},size=${cell.size},groupcode=${value_list.groupcode},samplecode=${value_list.samplecode},depth1=${value_list.depth1},depth2=${value_list.depth2},depth3=${value_list.depth3})}"
@@ -190,7 +189,6 @@
 						<li th:if="${end < cell.totalPages}" class="page-item"><a
 							th:href="@{search(page=${cell.totalPages-1},size=${cell.size},groupcode=${value_list.groupcode},samplecode=${value_list.samplecode},depth1=${value_list.depth1},depth2=${value_list.depth2},depth3=${value_list.depth3})}"
 							th:text="'>>'" class="page-link"></a></li>
-						</li>
 					</ul>
 				</div>
 
@@ -199,11 +197,64 @@
 
 		</div>
 	</div>
-	</div>
 
 	<div class="loading_image">
 		<img th:src="@{/img/img.gif}" />
 	</div>
+
+	<div class="modal fade" id="evalDataModal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog modal-dialog-centered modal-full-size" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="">상세 보기</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-6">
+							<div class="evalData">
+								<div class="indexSubTitle">평가 데이터</div>
+								<div>
+									<table id="evalData_grid" class="table table-bordered"
+											style="width: 100%">
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="dataVisual">
+								<div class="indexSubTitle">데이터 시각화</div>
+								<div>
+									<div class="mb-2 inner-radio-group">
+													<div class="form-check form-check-inline">
+														<input class="form-check-input" type="radio" name="unit" id="voltageUnit" value="voltage" onChange="evalData.targetChange(this)" checked> 
+														<label class="form-check-label" for="voltageUnit">전압</label>
+													</div>
+													<div class="form-check form-check-inline">
+														<input class="form-check-input" type="radio"name="unit" id="currentUnit" value="current" onChange="evalData.targetChange(this)"> 
+														<label class="form-check-label" for="currentUnit">전류</label>
+													</div>
+													<div class="form-check form-check-inline">
+														<input class="form-check-input" type="radio" name="unit" id="capacityUnit" value="charge_capacity" onChange="evalData.targetChange(this)"> 
+														<label class="form-check-label" for="capacityUnit">용량</label>
+													</div>
+													<div class="form-check form-check-inline">
+														<input class="form-check-input" type="radio" name="unit" id="temperatureUnit" value="temperature_1" onChange="evalData.targetChange(this)">
+														<label class="form-check-label" for="temperatureUnit">온도</label>
+													</div>
+												</div>
+									<div id="trendChart" style="width : 100%; height : 300px"></div>
+									<div id="amountOfChangeChart" style="width : 100%; height : 300px"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
-<script src="/js/cell.js"></script>
 </html>
